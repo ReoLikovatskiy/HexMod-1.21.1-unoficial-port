@@ -21,34 +21,29 @@ import net.minecraft.world.level.block.entity.BlockEntityType
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.fml.common.Mod
+import net.neoforged.fml.javafxmod.FMLJavaModLoadingContext
 import net.neoforged.neoforge.api.distmarker.OnlyIn
 import net.neoforged.neoforge.client.event.RenderGuiOverlayEvent
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent
 import net.neoforged.neoforge.client.event.ScreenEvent
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions
 import net.neoforged.neoforge.common.NeoForge
 import java.util.function.Function
 
-@Mod.EventBusSubscriber(modid = HexAPI.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = [Dist.CLIENT])
+@Mod.EventBusSubscriber(modid = "hexcasting", bus = Mod.EventBusSubscriber.Bus.MOD, value = [Dist.CLIENT])
 object NeoForgeHexClientInitializer {
-    fun setupClient(modEventBus: IEventBus) {
-        modEventBus.addListener(::setupClientStuff)
-
-        // Client events
-        NeoForge.EVENT_BUS.register(ClientTickHandler)
-    }
-
-    private fun setupClientStuff(event: FMLClientSetupEvent) {
-        Keybinds.ALL_BINDS.forEach { KeyBindingHelper.register(it) }
+    fun setupClient(event: net.neoforged.fml.event.lifecycle.FMLClientSetupEvent) {
+        Keybinds.ALL_BINDS.forEach { net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.register(it) }
 
         RegisterClientStuff.init()
-        HexModelLayers.init { loc, defn -> EntityModelLayerRegistry.registerModelLayer(loc, defn::get) }
+        HexModelLayers.init { loc, defn -> net.minecraft.client.renderer.entity.EntityModelLayerRegistry.registerModelLayer(loc, defn::get) }
 
         HexParticles.FactoryHandler.registerFactories(object : HexParticles.FactoryHandler.Consumer {
             override fun <T : ParticleOptions?> register(
                 type: ParticleType<T>,
                 constructor: Function<SpriteSet, ParticleProvider<T>>
             ) {
-                ParticleFactoryRegistry.registerParticleFactory(type, constructor::apply)
+                net.minecraft.client.particle.ParticleFactoryRegistry.getInstance().register(type, constructor::apply)
             }
         })
 
@@ -58,40 +53,37 @@ object NeoForgeHexClientInitializer {
                 type: BlockEntityType<T>,
                 berp: BlockEntityRendererProvider<in T>
             ) {
-                BlockEntityRenderers.register(type, berp)
+                net.minecraft.client.renderer.blockentity.BlockEntityRenderers.register(type, berp)
             }
         })
 
         HexInterop.clientInit()
         RegisterClientStuff.registerColorProviders(
-            { colorizer, item -> ItemBlockRenderTypes.register(item, colorizer) },
-            { colorizer, block -> ItemBlockRenderTypes.register(block, colorizer) }
+            { colorizer, item -> net.minecraft.client.color.item.ItemColors.register(colorizer, item) },
+            { colorizer, block -> net.minecraft.client.color.block.BlockColors.getInstance().register(colorizer, block) }
         )
-        ModelEvent.RegisterAdditional.register(RegisterClientStuff::onModelRegister)
     }
 
     object ClientTickHandler {
-        @SubscribeEvent
-        fun clientTick(event: TickEvent.ClientTickEvent) {
-            if (event.phase == TickEvent.Phase.END) {
+        @net.neoforged.neoforge.api.distmarker.OnlyIn(Dist.CLIENT)
+        fun clientTick(event: net.neoforged.neoforge.client.event.TickEvent.ClientTickEvent) {
+            if (event.phase == net.neoforged.neoforge.client.event.TickEvent.Phase.END) {
                 ClientTickCounter.clientTickEnd()
                 Keybinds.clientTickEnd()
                 ShiftScrollListener.clientTickEnd()
             }
         }
 
-        @SubscribeEvent
+        @net.neoforged.neoforge.api.distmarker.OnlyIn(Dist.CLIENT)
         fun renderLevelStage(event: RenderLevelStageEvent) {
             if (event.stage == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT) {
                 HexAdditionalRenderers.overlayLevel(event.poseStack, event.partialTick)
             }
         }
 
-        @SubscribeEvent
+        @net.neoforged.neoforge.api.distmarker.OnlyIn(Dist.CLIENT)
         fun renderGuiOverlay(event: RenderGuiOverlayEvent.Post) {
-            if (event.overlay == VanillaGuiOverlay.HELMET.id()) {
-                HexAdditionalRenderers.overlayGui(event.guiGraphics, event.partialTick)
-            }
+            HexAdditionalRenderers.overlayGui(event.guiGraphics, event.partialTick)
         }
     }
 }

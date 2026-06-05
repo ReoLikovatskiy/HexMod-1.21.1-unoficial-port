@@ -34,6 +34,7 @@ import net.neoforged.fml.ModContainer
 import net.neoforged.fml.common.Mod
 import net.neoforged.fml.config.ModConfig
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
+import net.neoforged.fml.javafxmod.FMLJavaModLoadingContext
 import net.neoforged.neoforge.common.NeoForge
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent
 import net.neoforged.neoforge.event.level.LevelEvent
@@ -41,7 +42,7 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent
 import net.neoforged.neoforge.network.PacketDistributor
 import java.util.function.BiConsumer
 
-@Mod(HexAPI.MOD_ID)
+@Mod("hexcasting")
 object NeoForgeHexInitializer {
     var patternRegistryIsProcessed: Boolean = false
 
@@ -52,7 +53,7 @@ object NeoForgeHexInitializer {
 
         // Register config
         val container = FMLJavaModLoadingContext.getInstance().container
-        container.registerConfig(ModConfig.Type.COMMON, NeoForgeHexConfig.SPEC)
+        container.registerConfig(ModConfig.Type.COMMON, NeoForgeHexConfig.COMMON_SPEC)
         container.registerConfig(ModConfig.Type.CLIENT, NeoForgeHexClientConfig.SPEC)
 
         // Server events
@@ -142,7 +143,7 @@ object NeoForgeHexInitializer {
     }
 
     private fun levelLoad(event: LevelEvent.Load) {
-        if (!patternRegistryIsProcessed && event.level !is ClientLevel) {
+        if (!patternRegistryIsProcessed && event.level !is net.minecraft.client.multiplayer.ClientLevel) {
             PatternRegistryManifest.processRegistry(event.level)
             patternRegistryIsProcessed = true
         }
