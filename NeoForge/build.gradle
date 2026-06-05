@@ -1,0 +1,106 @@
+plugins {
+    id 'net.neoforged.gradle.userdev' version '7.0.82'
+    id "at.petra-k.pkpcpbp.PKSubprojPlugin"
+}
+
+pkSubproj {
+    pkPublish = true
+    curseforgeJar = jarJar.archiveFile
+    curseforgeDependencies([
+        "paucal",
+        "patchouli",
+        "kotlin-for-forge",
+        "inline",
+    ])
+    modrinthJar = jarJar.archiveFile
+    modrinthDependencies([
+        "paucal:dabyDTwJ",
+        "patchouli:1.21.1-105-neoforge",
+        "kotlin-for-forge:5.2.0-neoforge",
+        "inline:1.21.1-1.2.3-neoforge",
+    ])
+}
+
+minecraft {
+    version = minecraftVersion
+}
+
+repositories {
+    mavenCentral()
+
+    // paucal and patchi
+    maven { url = 'https://maven.blamejared.com' }
+    // modmenu and clothconfig
+    maven { url "https://maven.shedaniel.me/" }
+    maven { url 'https://maven.ladysnake.org/releases' }
+    // Entity reach
+    maven { url "https://maven.jamieswhiteshirt.com/libs-release/" }
+    maven { url "https://mvn.devos.one/snapshots/" }
+    maven { url = "https://maven.terraformersmc.com/releases/" }
+    exclusiveContent {
+        forRepository {
+            maven { url = "https://api.modrinth.com/maven" }
+        }
+        filter { includeGroup "maven.modrinth" }
+    }
+    // pehkui
+    maven { url = "https://jitpack.io" }
+
+    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
+    flatDir {
+        dir 'libs'
+    }
+}
+
+dependencies {
+    implementation 'net.neoforged:neoforge:' + neoForgeVersion
+
+    // Reqs
+    compileOnly "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"
+    testCompileOnly "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"
+    compileOnly "com.demonwav.mcdev:annotations:1.0"
+
+    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
+    compileOnly project(":Common")
+
+    implementation "at.petra-k.paucal:paucal-neoforge-$minecraftVersion:$paucalVersion"
+    implementation "vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion-NEOFORGE"
+
+    implementation "com.samsthenerd.inline:inline-neoforge:$minecraftVersion-$inlineVersion"
+
+    // Optional integrations
+    implementation "me.shedaniel.cloth:cloth-config-neoforge:$clothConfigVersion"
+
+    implementation "dev.emi:emi-neoforge:${emiVersion}"
+
+    implementation("com.github.Virtuoel:Pehkui:${pehkuiVersion}", {
+        exclude group: "net.neoforged", module: "neoforge"
+    })
+
+    // i am speed
+    implementation "maven.modrinth:lithium:${lithiumVersion}"
+}
+
+tasks.withType(JavaCompile) {
+    source(project(":Common").sourceSets.main.allSource)
+}
+compileKotlin {
+    source(project(":Common").sourceSets.main.kotlin)
+}
+
+sourcesJar {
+    from project(":Common").sourceSets.main.allJava
+}
+
+sourceSets {
+    main.resources.srcDirs += ['src/generated/resources', '../Common/src/generated/resources']
+}
+
+processResources {
+    from project(":Common").sourceSets.main.resources
+    inputs.property "version", project.version
+
+    filesMatching("neoforge.mods.toml") {
+        expand "version": project.version
+    }
+}
