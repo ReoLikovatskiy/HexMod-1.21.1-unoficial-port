@@ -5,14 +5,20 @@
 
 A minecraft mod about casting Hexes, powerful and programmable magical effects, inspired by PSI.
 
-On Forge, this mod requires:
+## Versions
+
+This is an **unofficial NeoForge 1.21.1 port** of Hex Casting.
+
+**Original mod support:**
+
+On Forge (1.20.1), this mod requires:
 
 - PAUCAL
 - Patchouli
 - Kotlin for Forge
 - Caelus elytra api
 
-On Fabric, it requires:
+On Fabric (1.20.1), it requires:
 
 - PAUCAL
 - Patchouli
@@ -20,23 +26,29 @@ On Fabric, it requires:
 - Cardinal Components
 - ClothConfig and ModMenu
 
+**On NeoForge (1.21.1), this mod requires:**
+
+- PAUCAL (NeoForge 1.21.1)
+- Patchouli (NeoForge 1.21.1)
+- Kotlin for Forge (NeoForge compatible)
+
+## Documentation
+
 [Read the documentation online here!](https://fallingcolors.github.io/HexMod/)
 
 [Discord link](https://discord.gg/4xxHGYteWk)
 
 ## The Branches
 
-We are currently developing Hexcasting v0.11.x for 1.20.1, on the `main` branch.
+Original repository has branches for different Minecraft versions:
 
-The 0.10.x versions, for 1.19, are in long-term support. We probably won't be adding any new features, but we will try
-to fix bugs. Those are on the `1.19` branch.
+- `main` - Latest development for 1.20.1
+- `1.19` - Long-term support for 1.19
+- `1.18` - Long-term support for 1.18.2
+- `gh-pages` - Online Hex book documentation
 
-The 0.9.x versions, for 1.18.2, are in long-term support. We probably won't be adding any new features, but we will try
-to fix bugs. Those are on the `1.18` branch.
-
-The `gh-pages` branch is for the online Hex book.
-
-Other branches are old detritus from potential features.
+**This fork:**
+- `neoforge-1.21.1` - NeoForge 1.21.1 port (this branch)
 
 ## For Developers
 
@@ -51,4 +63,40 @@ do a very good job.) If you find you need something not in there yell at me on D
 
 ## Contributing
 
-Contributions are welcome via pull requests on GitHub. Please [link your PR](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue) to any issues that it fixes. Note that if your PR makes many unrelated changes, we may ask you to split it up into several smaller PRs to make it simpler to review. Also, feel free to update the `[UNRELEASED]` section in [CHANGELOG.md](./CHANGELOG.md) to document the changes in your PR (in a human-readable and concise manner, not just copying the commit messages).
+Contributions are welcome via pull requests on GitHub. Please [link your PR](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue) to an
+issue if one exists, and provide a detailed description of the change if one doesn't.
+
+## Building
+
+This NeoForge 1.21.1 port uses Gradle for building:
+
+```bash
+# Build the mod
+./gradlew build
+
+# Run the dev environment
+./gradlew runServer  # Server only
+./gradlew runClient  # Client only
+
+# Run all datagen
+./gradlew runAllDatagen
+```
+
+Jars will be output to `NeoForge/build/libs/`
+
+## License
+
+This mod is licensed under the MIT License. See LICENSE.txt for details.
+
+## Credits
+
+Original mod created by petrak@ (aka gamma-delta)
+
+- Falkory for textures
+- Wiresegal for lots of polish
+- Alwinfy for visual effects, proofreading, and code help
+- Kra3tor for sound effects
+- naj77 for the nice logo
+- And all of the wonderful patrons and testers!
+
+NeoForge 1.21.1 port by ReoLikovatskiy
