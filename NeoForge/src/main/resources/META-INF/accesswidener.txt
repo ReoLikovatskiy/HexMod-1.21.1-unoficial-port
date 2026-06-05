@@ -1,0 +1,9 @@
+# NeoForge Access Widener file for Hex Casting
+# This is used to expose private/protected methods and fields that we need to access
+
+accesible field net/minecraft/world/entity/Entity velocity Lnet/minecraft/world/phys/Vec3;
+accessible field net/minecraft/world/entity/LivingEntity potionEffects Ljava/util/Map;
+accessible method net/minecraft/world/entity/LivingEntity applyEffectTick (Lnet/minecraft/world/effect/MobEffect;)V
+accessible method net/minecraft/world/entity/monster/Raider findNearestEnemy (F)Lnet/minecraft/world/entity/LivingEntity;
+accessible field net/minecraft/world/entity/npc/AbstractVillager getOffers ()Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;
+accessible method net/minecraft/world/entity/npc/Villager setUnwantedStuff ()V

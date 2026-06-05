@@ -1,0 +1,28 @@
+{
+  "minVersion": "0.8",
+  "required": true,
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "hexcasting.mixins.refmap.json",
+  "package": "at.petrak.hexcasting.neoforge.mixin",
+  "mixins": [
+    "NeoForgeAxeItemMixin",
+    "NeoForgeBlockBehaviorMixin",
+    "NeoForgeClipContextMixin",
+    "NeoForgeEnchantmentTableBlockMixin",
+    "NeoForgeItemEntityMixin",
+    "NeoForgeLivingEntityMixin",
+    "NeoForgeMixinReloadableServerResources",
+    "NeoForgeMobMixin",
+    "NeoForgePlayerMixin",
+    "NeoForgeVillagerTurnIntoWitchMixin"
+  ],
+  "client": [
+    "client.NeoForgeAbstractTextureMixin",
+    "client.NeoForgeLevelRendererMixin",
+    "client.NeoForgeMixinGameRenderer",
+    "client.NeoForgeModelManagerMixin",
+    "client.NeoForgeMouseHandlerMixin",
+    "client.NeoForgeParticleEngineMixin",
+    "client.NeoForgePlayerRendererMixin"
+  ]
+}
